@@ -1,0 +1,40 @@
+{% extends 'accounts_base.html' %}
+
+{% block title %}
+	Bandhu | Delete User Account
+{% endblock %}
+
+{% block content %}
+<div class="container form-display" style="margin-top: 20px;">
+    <div class="wrap-login100 p-l-50 p-r-50 p-t-20 p-b-23 text-center" 
+        style="margin: auto; margin-top: 35px; border: 0 solid #e7e4e4; max-width: 500px; border-radius: 5px; background-color: #;">
+        <i class="fa fa-trash-alt" style="font-size: 4em; color: red;"></i>
+        <h1 class="mx-3 font-weight-bolder">Delete User Account</h1>
+        <p class="mx-3">Are you sure want to delete user? </p>
+        <p style="text-align: left; margin-left: 50px;">
+            <b>Email</b> : {{ user.email }}
+            <br>
+            <b>Name</b> : {{ profile.get_full_name }}
+            <br>
+            <b>Gender</b> : {{ profile.get_gender_display }}
+            <br>
+            <b>Date of Birth</b> : {{ profile.dob }}
+            <br>
+            <b>Profession</b> : {{ profile.profession }}
+            <br>
+            <b>Contact No.</b> : {{ profile.contact_no }}
+            <br>
+            <b>Address</b> : {{ profile.get_complete_address }}
+			<br>
+        </p>
+        <div class="row justify-content-center">
+            <div class="col-sm-6 text-center mb-3">
+                <a href="{% url 'account_deletion_confirmed' uidb64 %}" class="btn btn-danger w-75">Confirm</a>
+            </div>
+            <div class="col-sm-6 text-center mb-3 order-sm-first">
+                <a href="{% url 'home' %}" class="btn btn-success w-75">Cancel</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends 'accounts_base.html' %}
+{% load static %}
+{% block title %}
+	Bandhu | Sign Up
+{% endblock %}
+
+{% block style %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Outfit:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/bandhu.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css1/util.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css1/main.css' %}">
+<link rel="stylesheet" href="{% static 'css/accounts-auth-landing.css' %}">
+{% endblock %}
+
+{% block navbar %}{% endblock %}
+
+{% block content %}
+<div class="signup-page">
+	<div class="limiter">
+		<div class="container-login100">
+			<div class="wrap-login100 p-l-50 p-r-50 p-t-32 p-b-23">
+				<form class="login100-form validate-form flex-sb flex-w" method="POST">
+					{% csrf_token %}
+					<span class="login100-form-title p-b-33">
+						<h1 class="font-weight-bolder">Sign Up</h1>
+					</span>
+					<a href="/oauth/login/facebook/" class="btn-face m-b-15">
+						<i class="fab fa-facebook-square"></i>
+						Facebook
+					</a>
+					<a href="/oauth/login/google-oauth2/" class="btn-google m-b-20">
+						<img src="{% static 'img/icon/icon-google.png' %}" alt="GOOGLE">
+						Google
+					</a>
+					<div class="w-full text-center p-t-3 p-b-10">
+						<p>— OR —</p>
+						<span>Sign Up Using Email</span>
+						<div class="error_msg text-center w-full">
+							{% for field in form %}
+							{% for error in field.errors %}
+							<p class="mt-2 mb-2">{{ error }}</p>
+							{% endfor %}
+							{% endfor %}
+						</div>
+					</div>
+					{% for field in form %}
+					<div class="wrap-input100 validate-input m-b-16" data-validate="Required">
+						{{ field }}
+					</div>
+					{% endfor %}
+					<div class="container-login100-form-btn m-t-17">
+						<button class="login100-form-btn" type="submit">
+							<h4>Create Account</h4>
+						</button>
+					</div>
+					<div class="w-full text-center p-t-15">
+						<span>Already a member?</span>
+						<a href="/accounts/login/">Sign in now</a>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

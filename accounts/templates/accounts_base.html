@@ -1,0 +1,120 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link rel="shortcut icon" href='{% static "img/bandhulogo.gif" %}'>
+	<title>{% block title %}  {% endblock %} </title>
+
+	<style>
+		.main{
+			min-height: 100vh;
+			/* height: 100%; */
+		}
+	</style>
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="{% static 'vendor/css/bootstrap.min.css' %}">
+	<!-- Font Awesome CSS -->
+	<link rel="stylesheet" href="{% static 'vendor/css/fontawesome-all.min.css' %}">
+	<!-- Custom CSS -->
+	<link rel="stylesheet" href="{% static 'css/custom.css' %}">
+
+    {% block style %}
+	<style>
+		.btn-google {
+			padding: 5px;
+			margin: 5px;
+			border: 1px solid rgb(228, 224, 224);
+			border-radius: 5px;
+			min-width: 140px;
+			min-height: 30px;
+		}
+
+		.btn-facebook {
+			margin: 5px;
+			padding: 5px;
+			border: 1px solid rgb(228, 224, 224);
+			border-radius: 5px;
+			color: white;
+			min-width: 140px;
+			min-height: 30px;
+			background-color: #4267b2;
+		}
+
+		.main{
+			min-height: 100vh;
+			/* height: 100%; */
+		}
+
+		.form-display {
+			margin-top: 100px !important;
+			padding-top: 80px;
+		}
+
+		.form-control {
+			min-height: 45px;
+		}
+    </style>
+    {% endblock %}
+
+</head>
+<body data-spy="scroll" data-target=".navbar" data-offset="10">
+	<div class="main">
+		{% block navbar %}{% include 'snippets/navbar_landing.html' %}{% endblock %}
+
+        {% block content %}
+		
+        {% endblock %}
+	</div>
+
+	<!-- Toast -->
+	{% for message in messages %}
+	<div class="row justify-content-center">
+		<div style="position: fixed; bottom: 25px; left: 10px; z-index: 10;">
+			<div class="toast {{ message.tags }}" id="alert_toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="1500">
+				<div class="toast-body p-2 px-3">
+					<strong class="mr-auto">{{message}}</strong>
+					<button type="button" class="ml-3 close" style="margin-top: -3px;" data-dismiss="toast" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+  	{% endfor %}
+
+	<!-- Scroll To Top Button -->
+	<div id="scroll-to-top">
+		<div class="hex scroll-top">
+			<span><i class="fa fa-arrow-up"></i></span>
+		</div>
+	</div>
+	
+	{% include 'snippets/footer.html' %}
+
+	<!-- Bootstrap JS -->
+    <script src="{% static 'vendor/js/jquery-3.4.1.min.js' %}"></script>
+	<script src="{% static 'vendor/js/popper.min.js' %}"></script>
+	<script src="{% static 'vendor/js/bootstrap.min.js' %}"></script>
+	<!-- Custom Scripts -->
+	<script src='{% static "js/main.js" %}'></script>
+
+	<!-- Script for Toast -->
+	<script>
+		if("{% for message in messages %}{{message}}{% endfor %}"){
+			$('#alert_toast').toast('show');
+			if("{% for message in messages %}{{message.level}}{% endfor %}" == "40")
+				document.getElementById("alert_toast").classList.add("bg-danger");
+			else
+				document.getElementById("alert_toast").classList.add("bg-success");
+		}	
+	</script>
+
+	<!-- Contact Scrollspy Problem -->
+	<script>contact_scrollspy()</script>
+
+</body>
+</html>
