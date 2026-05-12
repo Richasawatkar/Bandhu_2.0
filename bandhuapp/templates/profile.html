@@ -1,0 +1,252 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %} Bandhu | User Profile {% endblock %}
+
+{% block style %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/bandhu.css' %}">
+<style>
+	@media screen and (max-width: 600px) {
+		.profile-page .container { width: 85vw; }
+	}
+	.profile-page .imgCircle {
+		position: relative;
+		width: 150px !important;
+		margin: auto;
+	}
+	.profile-page label {
+		font-weight: 600;
+		letter-spacing: 0.02em;
+		color: #3d5c60;
+		font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+	}
+	.profile-page .form-control:focus {
+		border-color: #80b3ba;
+		box-shadow: 0 0 0 0.2rem rgba(128, 179, 186, 0.25);
+		outline: 0;
+	}
+</style>
+{% endblock %}
+
+{% block top-section-style %}style="background-size: cover; background: {% if content and content.banner_image %}url('{{ content.banner_image.url }}') 50% center no-repeat fixed{% else %}linear-gradient(135deg, #3d5c60 0%, #80b3ba 100%){% endif %};"{% endblock %}
+
+{% block navbar-links %}
+<li class="nav-item">
+	<a class="nav-link px-3" href="{% url 'home' %}">Home</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link px-3" href="#contact">Contact</a>
+</li>
+{% endblock %}
+
+{% block showcase-title-container %}
+<div class="slider-txt-container page-showcase page-showcase-tall">
+	<h2 class="bold-txt page-showcase-title">Profile</h2>
+	<div class="page-showcase-accent"></div>
+</div>
+{% endblock %}
+{% block angular %}
+<div class="angular page-angular">
+	<div class="top-angle"></div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="profile-page">
+<section class="page-hero page-hero-with-angular">
+	<div class="container" style="padding: 2rem 0 3rem;">
+		<div class="row justify-content-center">
+			<div class="col-lg-8">
+				<div class="page-content-card card border-0 shadow-sm px-5 py-4 mb-5"
+					style="border-radius: 16px; border: 2px solid rgba(128, 179, 186, 0.35) !important; box-shadow: 0 12px 40px rgba(0,0,0,0.12), 0 4px 16px rgba(0,0,0,0.06) !important; background: linear-gradient(135deg, #ffffff 0%, #d7e9f2 40%, #80b3ba 100%) !important;">
+
+			<form method="POST" enctype="multipart/form-data" id="profileForm" class="needs-validation" novalidate>
+				{% csrf_token %}
+				{% if first_time %}
+				<div class="mb-4 text-center">
+					<h2 class="font-weight-bold" style="color: #3d5c60; font-family: 'DM Sans', sans-serif;">Complete Your Profile</h2>
+				</div>
+				{% else %}
+				<div class="row justify-content-center mb-4 imgCircle">
+					{% if profile.profile_pic %}
+						<img src="{{ profile.profile_pic.url }}" alt="profile_pic" class="rounded-circle" style="height: 150px; width: 150px;">
+					{% elif profile.gender == 'F' %}
+						<img src="{% static 'img/woman.png' %}" alt="profile_pic" class="rounded-circle" style="height: 150px; width: 150px;">
+					{% else %}
+						<img src="{% static 'img/man.png' %}" alt="profile_pic" class="rounded-circle" style="height: 150px; width: 150px;">
+					{% endif %}
+
+					<a onclick="uploadImage();" style="bottom:0px;right:10px;text-decoration:none;color:inherit;cursor:pointer;position:absolute;" data-toggle="modal" data-target="#ProfileModalCenter" >
+						<svg style="padding:5px 10px 5px 10px;border-radius:50%;background-color:white;box-sizing:border-box;height:32px;width:32px;" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="camera-retro" class="svg-inline--fa fa-camera-retro fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="black" d="M48 32C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48H48zm0 32h106c3.3 0 6 2.7 6 6v20c0 3.3-2.7 6-6 6H38c-3.3 0-6-2.7-6-6V80c0-8.8 7.2-16 16-16zm426 96H38c-3.3 0-6-2.7-6-6v-36c0-3.3 2.7-6 6-6h138l30.2-45.3c1.1-1.7 3-2.7 5-2.7H464c8.8 0 16 7.2 16 16v74c0 3.3-2.7 6-6 6zM256 424c-66.2 0-120-53.8-120-120s53.8-120 120-120 120 53.8 120 120-53.8 120-120 120zm0-208c-48.5 0-88 39.5-88 88s39.5 88 88 88 88-39.5 88-88-39.5-88-88-88zm-48 104c-8.8 0-16-7.2-16-16 0-35.3 28.7-64 64-64 8.8 0 16 7.2 16 16s-7.2 16-16 16c-17.6 0-32 14.4-32 32 0 8.8-7.2 16-16 16z"></path></svg>
+					</a>
+					<input type="file" name="profile_pic" onchange="changePropic();" class="form-control-file" id="upimage" hidden accept="image/*" />
+				</div>
+				{% endif %}
+				<div class="row justify-content-center">
+					<div class="col-md-6 mb-3">
+						<label for="firstName">First name <span class="text-danger">*</span></label>
+						<input name="first_name" type="text" class="form-control" id="firstName" value="{{ profile.first_name }}" required autocomplete="given-name">
+						<div class="invalid-feedback">
+							Valid First Name is required.
+						</div>
+					</div>
+					<div class="col-md-6 mb-3">
+						<label for="lastName">Last name <span class="text-danger">*</span></label>
+						<input name="last_name" type="text" class="form-control" id="lastName" value="{{ profile.last_name }}" required autocomplete="family-name">
+						<div class="invalid-feedback">
+							Valid Last Name is required.
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-4 mb-3">
+						<label for="gender">Gender <span class="text-danger">*</span></label>
+						<select name="gender" class="custom-select d-block w-100" id="gender" required>
+							<option value="M">Male</option>
+							<option value="F">Female</option>
+							<option value="O">Other</option>
+						</select>
+					</div>
+					<div class="col-md-4 mb-3">
+						<label for="dob">Date of Birth <span class="text-danger">*</span></label>
+						<!-- <input type="text" class="form-control" id="firstName" value="" required> -->
+						<!-- <input name="dob" type="date" class="form-control" id="dob" required> -->
+						<input name="dob" type="date" max="2009-12-31" id="dob" class="form-control" value="{{ profile.dob|date:'Y-m-d' }}" required>
+						<div class="invalid-feedback">
+							Please enter a valid date of birth.
+						</div>
+					</div>
+					<div class="col-md-4 mb-3">
+						<label for="profession">Profession <span class="text-danger">*</span></label>
+						<input name="profession" type="text" class="form-control" id="profession" value="{{ profile.profession }}" required>
+						<div class="invalid-feedback">
+							Valid profession is required.
+						</div>
+					</div>
+				</div>
+
+				<div class="mb-3">
+					<label for="contactNo">Contact No. <span class="text-danger">*</span></label>
+					<input name="contact_no" type="tel" pattern="[0-9]{10}" class="form-control" id="contactNo" value="{{ profile.contact_no }}" required autocomplete="tel">
+					<div class="invalid-feedback">
+						Valid Contact No. is required.
+					</div>
+				</div>
+			
+				<div class="mb-3">
+					<label for="address">Address <span class="text-danger">*</span></label>
+					<input name="street_address1" type="text" class="form-control" id="address" value="{{ profile.street_address1 }}" required autocomplete="street-address">
+					<div class="invalid-feedback">
+						Please enter your address.
+					</div>
+				</div>
+			
+				<div class="mb-3">
+					<label for="address2">Address 2 <span class="text-muted">(Optional)</span></label>
+					<input name="street_address2" type="text" class="form-control" id="address2" value="{{ profile.street_address2 }}" autocomplete="address-line2">
+				</div>
+			
+				<div class="row">
+					<div class="col-md-5 mb-3">
+					<label for="city">City <span class="text-danger">*</span></label>
+					<input name="city" type="text" class="form-control" id="city" value="{{ profile.city }}" required autocomplete="address-level2">
+					<div class="invalid-feedback">
+						Please enter a valid city.
+					</div>
+					</div>
+					<div class="col-md-4 mb-3">
+					<label for="state">State <span class="text-danger">*</span></label>
+					<input name="state" type="text" class="form-control" id="state" value="{{ profile.state }}" required autocomplete="address-level1">
+					<div class="invalid-feedback">
+						Please provide a valid state.
+					</div>
+					</div>
+					<div class="col-md-3 mb-3">
+					<label for="pinCode">PIN Code <span class="text-danger">*</span></label>
+					<input name="pincode" type="number" class="form-control" id="pinCode" value="{{ profile.pincode }}" required autocomplete="postal-code">
+					<div class="invalid-feedback">
+						PIN code required.
+					</div>
+					</div>
+				</div>
+				{% if first_time %}
+				<div class="mb-3">
+					<label for="profile_pic">Profile Picture <span class="text-danger">*</span></label>
+					<input name="profile_pic" type="file" class="form-control-file" id="profile_pic" required accept="image/*">
+				</div>
+				{% endif %}
+
+				<hr class="mb-4">
+				<div class="row justify-content-center mb-4">
+					<div class="col-md-5">
+						<button type="submit" class="btn btn-primary btn-lg btn-block">Save Profile</button>
+					</div>
+				</div>
+				
+			</form>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+	<script type="text/javascript">
+		(function () {
+			'use strict'
+			window.addEventListener('load', function () {
+				// Fetch all the forms we want to apply custom Bootstrap validation styles to
+				var forms = document.getElementsByClassName('needs-validation')
+
+				// Loop over them and prevent submission
+				Array.prototype.filter.call(forms, function (form) {
+					form.addEventListener('submit', function (event) {
+					if (form.checkValidity() === false) {
+						event.preventDefault()
+						event.stopPropagation()
+					}
+					form.classList.add('was-validated')
+					}, false)
+				})
+			}, false)
+		}())
+
+		function uploadImage() {
+			$('#upimage').click()
+		}
+
+		function changePropic() {
+			$('#profileForm').submit()
+		}
+	</script>
+
+	<!-- Script for Gender Field -->
+	<script>
+		if("{{ profile.gender }}" == "M") $('#gender option:eq(0)').prop('selected', true)
+		else if("{{ profile.gender }}" == "F") $('#gender option:eq(1)').prop('selected', true)
+		else $('#gender option:eq(2)').prop('selected', true)
+	</script>
+
+	<!-- Script for Date Picker -->
+	{% comment %} <script type="text/javascript">
+		$('#dob').datepicker({
+			weekStart: 1,
+			autoclose: true,
+			todayHighlight: true,
+		});
+		// $('#dob').datepicker("setDate", new Date());
+	</script> {% endcomment %}
+
+	<script>
+		if ("{{ first_time }}" === "True") contact_scrollspy()
+	</script>
+	
+{% endblock %}

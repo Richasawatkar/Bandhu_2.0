@@ -1,0 +1,911 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+{% load static %}
+{% load permissions %}
+
+{% block title %} Bandhu {% endblock %}
+
+{% block style %}
+<!-- Custom CSS -->
+<link rel="stylesheet" href="{% static 'css/bandhu.css' %}" >
+<link rel="stylesheet" href="{% static 'vendor/css/bootstrap-select.min.css' %}">
+
+<!-- Custom Style -->
+<style>
+    #top-section {
+        background: url("{% if content and content.banner_image %}{{ content.banner_image.url }}{% else %}{% static 'img/our_mission.jpg' %}{% endif %}") 50% center no-repeat fixed;
+        background-size: cover;
+    }
+    /* Landing-only heading boost for stronger visual prominence */
+    #about .section-title,
+    #mission > .section-title,
+    #recent-activities .section-title,
+    #gallery .gallery-section-head .section-title,
+    #volunteer .section-title.parallax-title {
+        font-size: clamp(2.25rem, 4.8vw, 3.2rem) !important;
+        line-height: 1.15 !important;
+        font-weight: 800 !important;
+    }
+    #mission .content-title {
+        font-size: clamp(1.9rem, 3.6vw, 2.6rem) !important;
+        line-height: 1.15 !important;
+        font-weight: 800 !important;
+    }
+</style>
+{% endblock %}
+
+{% block navbar-links %}
+<li class="nav-item">
+    <a class="nav-link px-3 px-lg-2" href="#about">About</a>
+</li>
+{% if people_designations %}
+<li class="nav-item dropdown">
+    <a class="nav-link px-3 px-lg-2 dropdown-toggle" href="/people">
+      People
+    </a>
+    <div class="dropdown-menu">
+        {% for desg in people_designations %}
+            <a class="dropdown-item" href="/people#{{desg.title|to_snake_case}}">{{desg.title}}</a>
+        {% endfor %}
+    </div>
+</li>
+{% endif %}
+<!-- <li class="nav-item">
+    <a class="nav-link px-3 px-lg-2" href="#mission">Mission</a>
+</li> -->
+<li class="nav-item dropdown">
+    <a class="nav-link px-3 px-lg-2 dropdown-toggle" href="#mission">
+      Mission
+    </a>
+    <div class="dropdown-menu">
+      <a class="dropdown-item" href="#sanskar">Sanskar</a>
+      <a class="dropdown-item" href="#swaraj">Swaraj</a>
+      <a class="dropdown-item" href="#swabalamban">Swabalamban</a>
+    </div>
+</li>
+{% if recent_events %}
+<li class="nav-item">
+    <a class="nav-link px-3 px-lg-2" href="#recent-activities">Recents</a>
+</li>
+{% endif %}
+<li class="nav-item">
+    <a class="nav-link px-3 px-lg-2" href="#gallery">Gallery</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link px-3 px-lg-2" href="#contact">Contact</a>
+</li>
+{% endblock %}
+
+{% block showcase-title-container %}
+<div class="slider-txt-container" style="padding: 210px 0 300px 0;">
+    <p class="bold-txt mb-3" style="font-family: 'Libre Franklin', sans-serif;">
+        BANDHU
+    </p>
+    <p id="header-text" class="parallax-description font-weight-bold" style="color: #ff9800;">
+        <span id="header-text-line" class="d-block" lang="or" style="font-family: oriya;">ସବାଶେଷ  ମଣିଷର </span>
+    </p>
+    <!-- <p class="parallax-description pt-3" style="font-weight:500; font-family:cursive; text-transform: capitalize ;">
+        Sanskar, Swaraj and Swabalamban
+    </p> -->
+</div>
+
+{% endblock %}
+
+{% block content %}
+
+<!-- Initiatives Cards Section -->
+{% if initiatives %}
+<section id="initiatives" style="margin-top: -200px;">
+    <div class="row justify-content-center initiatives mx-1">
+        <div class="col-lg-20 col-md-4 col-sm-6 px-1">
+            <div class="col-sm card mx-auto" >
+                <img src="{{ initiatives.ankurayan_thumb.url }}" class="rounded-top card-img-top" alt="Ankurayan">
+                <div class="card-body p-3">
+                    <h5 class="card-title content-title font-weight-bolder" style="text-align: center;">Ankurayan</h5>
+                    <p class="content-description">
+                        {{ initiatives.ankurayan_desc|safe }}
+                    </p>
+                </div>
+                <a href="{% url 'ankurayan:ankurayan' %}" class="stretched-link"></a>
+            </div>
+        </div>
+        <div class="col-lg-20 col-md-4 col-sm-6 px-1">
+            <div class="col-sm card  mx-auto" >
+                <img src="{{ initiatives.kendra_thumb.url }}" class="rounded-top">
+                <div class="card-body p-3">
+                    <h5 class="card-title content-title font-weight-bolder">Anandakendra</h5>
+                    <p class="content-description">
+                        {{ initiatives.kendra_desc|safe }}
+                    </p>
+                </div>
+                <a href="{% url 'anandakendra:anandakendra' %}" class="stretched-link"></a>
+            </div>
+        </div>
+        <div class="col-lg-20 col-md-4 col-sm-6 px-1">
+            <div class="col-sm card  mx-auto" >
+                <img src="{{ initiatives.bandhughar_thumb.url }}" class="rounded-top">
+                <div class="card-body p-3">
+                    <h5 class="card-title content-title font-weight-bolder">Bandhughar</h5>
+                    <p class="content-description">
+                        {{ initiatives.bandhughar_desc|safe }}
+                    </p>
+                </div>
+                <a href="{% url 'ashram:ashram' %}" class="stretched-link"></a>
+            </div>
+        </div>
+        <div class="col-lg-20 col-md-4 col-sm-6 px-1">
+            <div class="col-sm card  mx-auto" >
+                <img src="{{ initiatives.otheract_thumb.url }}" class="rounded-top">
+                <div class="card-body p-3">
+                    <h5 class="card-title content-title font-weight-bolder">Other Activities</h5>
+                    <p class="content-description">
+                        {{ initiatives.otheract_desc|safe }}
+                    </p>
+                </div>
+                <a href="{% url 'charitywork:charity_work' %}" class="stretched-link"></a>
+            </div>
+        </div>
+        <div class="col-lg-20 col-md-4 col-sm-6 px-1">
+            <div class="col-sm card  mx-auto" >
+                <img src="{{ initiatives.publications_thumb.url }}" class="rounded-top">
+                <div class="card-body p-3">
+                    <h5 class="card-title content-title font-weight-bolder">Our Publications</h5>
+                    <p class="content-description">
+                        {{ initiatives.publications_desc|safe }}
+                    </p>
+                </div>
+                <a href="{% url 'publications:index' %}" class="stretched-link"></a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+<!-- Initiatives Cards Section Ends -->
+<section id="current-updates" class="current-updates">
+    <div class="d-flex flex-row justify-content-center">
+        <table style="font-family:Verdana, Arial, Helvetica, sans-serif;font-size:14px;" width="97%">
+            <tbody>
+                <tr style="border:thin #005E66 inset;color:#ffffff;">
+                    <td style="color:#ffffff;padding-left: 10px;font-weight: bold;" width="15%" bgcolor="#005E66">Current Updates:-</td>
+                    <td width="80%" style="color:#ffffff;" bgcolor="#005E66">
+                        <marquee behavior="scroll" scrollamount="4" direction="left" style="margin-top:2px;color:#ffffff;" onmouseover="this.stop();" onmouseout="this.start();" width="100%" class="current-updates-marquee">
+                            {% for update in current_updates %}
+                                {% if update.url %}
+                                <a href="{{ update.url }}" target="_blank">{{ update.desc | safe}}</a>
+                                {% else %}
+                                <a>{{update.desc | safe}}</a>
+                                {% endif %}
+                            {% endfor %}
+                        </marquee>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+{% if videos.count %}
+<section id="youtube" class="glide-carousel-custom">
+    <div class="bg-grey content-box from-bottom delay-200" style="padding: 50px 0;">
+        <h3 class="section-title">Youtube Videos</h3>
+        <div class="container">
+            <div class="row">
+                <div class="glide youtube_glide">
+                    <div class="glide__track" data-glide-el="track">
+                        <ul class="glide__slides">
+                            {% for video in videos %}
+                            <li class="glide__slide">
+                                {{ video.script | safe }}
+                                <h5 class="p-3 font-weight-bold">{{ video.title }}</h5>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="glide__arrows disable_arrows d-none d-md-block" data-glide-el="controls">
+                        <button class="slider_arrow slider_arrow--prev glide__arrow glide__arrow--left"
+                            data-glide-dir="<">
+                            <i class="fas fa-arrow-circle-left"></i>
+                        </button>
+                        <button class="slider_arrow slider_arrow--next glide__arrow glide__arrow--right"
+                            data-glide-dir=">">
+                            <i class="fas fa-arrow-circle-right"></i>
+                        </button>
+                    </div>
+                    <div class="glide__bullets" data-glide-el="controls[nav]">
+                        {% for video in videos %}
+                        <button class="glide__bullet" data-glide-dir="={{ forloop.counter0 }}"></button>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- About secion -->
+{% if about %}
+<section id="about" class="mb-4">
+    <h3 class="section-title mt-5 pt-3">About Us</h3>
+    <div class="container">
+        <div class="content-box mt-4 text-center">
+            <p style="font-size: 20px;">
+                <strong>{{ about.tagline|safe }}</strong>
+            </p>
+            <p style="font-size: 18px;">
+                {{ about.desc|safe }}
+            </p>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Mission Section -->
+{% if mission %}
+<section id="mission">
+    <h3 class="section-title mt-5 pt-3 pt-sm-0">Our Mission</h3>
+    <div class="container">
+        <div class="section-content">
+            <!-- SANSKAR -->
+            <div id="sanskar">
+                <div class="row justify-content-center mb-5">
+                    <h3 class="content-title d-md-none mb-4">Sanskar</h3>
+                    <div class="col-md-5 col-lg-4 align-self-center">
+                        <div id="sanskar-carousel" class="carousel slide m-auto" data-ride="carousel">
+                            {% if mission.sanskarcarousel_set.count > 1 %}
+                            <ul class="carousel-indicators">
+                                {% for img in mission.sanskarcarousel_set.all %}
+                                <li data-target="#sanskar-carousel" data-slide-to="{{ forloop.counter0 }}"
+                                    class="{% if forloop.counter == 1 %}active{% endif %}"></li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+                            <div class="carousel-inner">
+                                {% for img in mission.sanskarcarousel_set.all %}
+                                <div class="carousel-item {% if forloop.counter == 1 %}active{% endif %}">
+                                    <img src="{{ img.picture.url }}" alt="carousel image">
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content-box col-md-7 col-lg-8 mt-4">
+                        <h3 class="content-title d-none d-md-block">Sanskar</h3>
+                        <p>
+                            <strong>
+                                {{ mission.sanskar_tagline|safe }}
+                            </strong>
+                        </p>
+                        <p>
+                            {{ mission.sanskar_desc|safe }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <!-- SWARAJ -->
+            <div id="swaraj">
+                <div class="row justify-content-center mb-5">
+                    <h3 class="content-title d-md-none mb-4">Swaraj</h3>
+                    <div class="col-md-5 col-lg-4 align-self-center">
+                        <div id="swaraj-carousel" class="carousel slide m-auto" data-ride="carousel">
+                            {% if mission.swarajcarousel_set.count > 1 %}
+                            <ul class="carousel-indicators">
+                                {% for img in mission.swarajcarousel_set.all %}
+                                <li data-target="#swaraj-carousel" data-slide-to="{{ forloop.counter0 }}"
+                                    class="{% if forloop.counter == 1 %}active{% endif %}"></li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+                            <div class="carousel-inner">
+                                {% for img in mission.swarajcarousel_set.all %}
+                                <div class="carousel-item {% if forloop.counter == 1 %}active{% endif %}">
+                                    <img src="{{ img.picture.url }}" alt="carousel image">
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-box col-md-7 col-lg-8 mt-4 order-md-first">
+
+                        <h3 class="content-title d-none d-md-block">Swaraj</h3>
+                        <p>
+                            <strong>
+                                {{ mission.swaraj_tagline|safe }}
+                            </strong>
+                        </p>
+                        <p>
+                            {{ mission.swaraj_desc|safe }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <!-- SWABALAMBAN -->
+            <div id="swabalamban">
+                <div class="row justify-content-center mb-5">
+                    <h3 class="content-title d-md-none mb-4">Swabalamban</h3>
+                    <div class="col-md-5 col-lg-4 align-self-center">
+                        <div id="swabalamban-carousel" class="carousel slide m-auto" data-ride="carousel">
+                            {% if mission.swabalambancarousel_set.count > 1 %}
+                            <ul class="carousel-indicators">
+                                {% for img in mission.swabalambancarousel_set.all %}
+                                <li data-target="#swabalamban-carousel" data-slide-to="{{ forloop.counter0 }}"
+                                    class="{% if forloop.counter == 1 %}active{% endif %}"></li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+                            <div class="carousel-inner">
+                                {% for img in mission.swabalambancarousel_set.all %}
+                                <div class="carousel-item {% if forloop.counter == 1 %}active{% endif %}">
+                                    <img src="{{ img.picture.url }}" alt="carousel image">
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content-box col-md-7 col-lg-8 mt-4">
+                        <h3 class="content-title d-none d-md-block">Swabalamban</h3>
+                        <p>
+                            <strong>
+                                {{ mission.swabalamban_tagline|safe }}
+                            </strong>
+                        </p>
+                        <p>
+                            {{ mission.swabalamban_desc|safe }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+{% endif %}
+<!-- About Section Ends -->
+<!-- Recent Activities Section -->
+{% if recent_events %}
+<section id="recent-activities" class="glide-carousel-custom">
+    <div class="bg-grey" style="padding: 50px 0;">
+        <div class="container">
+            <div class="row">
+                <div class="section-content w-100">
+                    <div class="content-box from-bottom delay-200">
+                        <h3 class="section-title">Recent Activities</h3>
+                        <div class="glide recent-activities-glide">
+                            <div class="glide__track" data-glide-el="track">
+                                <ul class="glide__slides">
+                                    {% for event in recent_events %}
+                                    <li class="glide__slide">
+                                        <div class="card w-100 shadow-sm border border-primary border-rounded mx-auto my-2">
+                                            <img src="{{ event.thumb.url }}" class="card-img-top home-card-img" alt=""  width="300px">
+                                            <div class="card-body pb-0">
+                                                <h5 class="card-title font-weight-bold">{{ event.name }}</h5>
+                                                <p class="mb-3">
+                                                    {{ event.kendra }}{{ event.category.ankurayan }}{{ event.ashram }}{{ event.charity }}
+                                                <br>
+                                                </p>
+                                                <a href="#" class="stretched-link" data-target="#recent-modal{{forloop.counter0}}" data-toggle="modal"></a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                                <div class="glide__arrows disable_arrows d-none d-md-block" data-glide-el="controls">
+                                <button class="slider_arrow slider_arrow--prev glide__arrow glide__arrow--left" data-glide-dir="<">
+                                    <i class="fas fa-arrow-circle-left"></i>
+                                </button>
+                                <button class="slider_arrow slider_arrow--next glide__arrow glide__arrow--right" data-glide-dir=">">
+                                    <i class="fas fa-arrow-circle-right"></i>
+                                </button>
+                            </div>
+                            <div class="glide__bullets" data-glide-el="controls[nav]">
+                                {% for event in recent_events %}
+                                <button class="glide__bullet" data-glide-dir="={{ forloop.counter0 }}"></button>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- MODAL -->
+{% for event in recent_events %}
+<div class="modal fade bd-example-modal-lg" tabindex="-1" id="recent-modal{{forloop.counter0}}" role="dialog"
+aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title bld" id="exampleModalLongTitle">{{event.name}}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-6 align-self-center">
+                    <div id="event{{ forloop.count0 }}-carousel" class="carousel slide m-auto" data-ride="carousel">
+                        <ul class="carousel-indicators">
+                            <li data-target="#event{{ forloop.count0 }}-carousel" data-slide-to="0" class=""></li>
+                            <li data-target="#event{{ forloop.count0 }}-carousel" data-slide-to="1" class=""></li>
+                            <li data-target="#event{{ forloop.count0 }}-carousel" data-slide-to="2" class="active"></li>
+                        </ul>
+                        <div class="carousel-inner">
+                            <div class="carousel-item">
+                                <img src="{% static 'img/pimg6.jpg' %}" alt="carousel image" class="w-100">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="{% static 'img/pimg2.jpg' %}" alt="carousel image" class="w-100">
+                            </div>
+                            <div class="carousel-item active">
+                                <img src="{% static 'img/pimg3.jpg' %}" alt="carousel image" class="w-100">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h3 class="font-weight-bolder">Description</h3>
+                    {{ event.description }}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</div>
+{% endfor %}
+{% endif %}
+<!-- Recent Activities Section Ends -->
+<!-- Volunteer Section -->
+<section id="volunteer">
+    <div class="parallax-style text-white text-center">
+        <div class="parallax-overlay dark-overlay section-padding" style="padding: 80px 0 70px;">
+            <div class="container">
+                <div class="section-head" style="margin-bottom:60px;">
+                    <h3 class="section-title parallax-title" style="word-spacing: 5px;">
+                        {{ volunteer.title }}
+                    </h3>
+                </div>
+
+                <div class="row justify-content-center">
+                    <p class="parallax-description w-100 px-3" style="font-size:1.7em; line-height:35px; margin-bottom: 30px;">
+                        {{ volunteer.tagline }}
+                    </p>
+                    <button type="button" class="btn btn-outline-light py-2 px-4 custom-btn angle-effect">
+                        <a href="{% url 'signup' %}" class="d-block text-decoration-none text-white">Join Now</a>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Volunteer Section End-->
+
+<section id="gallery">
+    <div class="bg-grey" style="padding: 80px 0 60px;">
+        <div class="container">
+            <div class="section-head gallery-section-head">
+                <h2 class="section-title">Gallery</h2>
+                <div class="section-accent gallery-section-accent"></div>
+                <p class="section-description gallery-section-description">
+                    {{ gallery.tagline }}
+                </p>
+            </div>
+
+            <div id="gallery-container" class="gallery-container">
+            {% if photos.count %}
+                <div class="glide-carousel-custom mt-4">
+                    <div class="glide gallery_glide">
+                        <div class="glide__track" data-glide-el="track">
+                            <ul class="glide__slides">
+                                {% for photo in photos %}
+                                <li class="glide__slide">
+                                    <div class="gallery-slide-card position-relative rounded overflow-hidden">
+                                        <img src="{{ photo.picture.url }}" alt="Gallery" class="gallery-slide-img">
+                                        <a href="javascript:pswpInit({{ forloop.counter0 }})" class="stretched-link gallery-slide-link">
+                                            <i class="fas fa-search-plus"></i>
+                                        </a>
+                                    </div>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="glide__bullets" data-glide-el="controls[nav]">
+                            {% for photo in photos %}
+                            <button class="glide__bullet" data-glide-dir="={{ forloop.counter0 }}"></button>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <p class="text-center lead mt-4 mb-0"><em>Nothing to show here!</em></p>
+            {% endif %}
+            </div>
+            {% if user.is_authenticated and user.is_admin %}
+            <div class="row justify-content-center mt-4">
+                <div class="col col-sm-5 add-images text-center">
+                    <button type="button" class="btn btn-outline-primary" data-toggle="modal"
+                        data-target="#addToGallery">
+                        Upload Image
+                    </button>
+                    <div class="modal fade bd-example-modal-lg" tabindex="-1" id="addToGallery" role="dialog"
+                        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title bld" id="exampleModalLongTitle">Upload Images</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form method="POST" enctype="multipart/form-data" name="imageUploadForm"
+                                            action="{% url 'add_image' %}" onsubmit="return imageValidation()">
+                                        {% csrf_token %}
+                                        <label class="left-label bld" for="">Image</label>
+                                        <div class="input-group">
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input"
+                                                    name="image" id="inputGroupFile04"
+                                                    aria-describedby="inputGroupFileAddon04">
+                                                <label class="custom-file-label" for="inputGroupFile04">Add
+                                                    Image</label>
+                                            </div>
+                                        </div><br>
+                                        <label class="left-label bld" for="">Caption</label>
+                                        <textarea class="form-control" name="caption" rows="3"
+                                            placeholder="Caption for image (optional)"></textarea><br>
+                                        <label class="left-label bld" for="tags-select">Tags</label>
+                                        <select id="tags-select" class="form-control selectpicker" name="tags" multiple>
+                                            <option value="ankurayan">Ankurayan</option>
+                                            <option value="anandakendra">Anandakendra</option>
+                                            <option value="bandhughar">Bandhughar</option>
+                                            <option value="other">Other Activities</option>
+                                        </select><br>
+                                        <button class="btn btn-primary w-50 mt-4">Submit</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="col col-sm-5 approve-images text-center">
+                    <button type="button" class="btn btn-outline-primary" data-toggle="modal"
+                        data-target="#deleteImages">
+                        Delete Images
+                    </button>
+                </div> -->
+                {% if user|is_admin %}
+                <div class="col col-sm-5 approve-images text-center">
+                    <button type="button" class="btn btn-outline-primary" data-toggle="modal"
+                        data-target="#approveGallery">
+                        Approve Image
+                    </button>
+                    <div class="modal fade" id="approveGallery">
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                            <div class="modal-content shadow">
+                                <div class="modal-header">
+                                    <h5 class="modal-title bld content-title">Approve Photos</h5>
+                                    <button type="button" class="close" style="padding: .5rem 1rem;"
+                                        data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true" style="font-size: 2.375rem;">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        {% if unapproved_photos.count %}
+                                        <div id="approve-images-carousel" class="col-12 approve-images-carousel carousel slide m-auto" data-ride="carousel">
+                                            <div class="carousel-inner">
+                                                {% for photo in unapproved_photos %}
+                                                {% if forloop.counter == 1 %}
+                                                <div class="carousel-item active unapp-photo{{ photo.id }}">
+                                                {% else %}
+                                                <div class="carousel-item unapp-photo{{ photo.id }}">
+                                                {% endif %}
+                                                    <img src="{{ photo.picture.url }}" alt="carousel image"
+                                                        class="w-100" style="height: 400px; width: 400px;">
+                                                    <br><br>
+                                                    <div class="row justify-content-center">
+                                                        <div class="col-sm-5 text-center">
+                                                            <button type="button" onclick="imageApproval('approve','{{photo.pk}}');" class="btn btn-success">Approve</button>
+                                                        </div>
+                                                        <!-- <div class="col col-md-2"></div> -->
+                                                        <div class="col-sm-5 text-center">
+                                                            <button type="button"
+                                                                onclick="imageApproval('discard','{{photo.pk}}');"
+                                                                class="btn btn-danger">Discard</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                {% endfor %}
+                                                <a class="carousel-control-prev" href="#approve-images-carousel"
+                                                    data-slide="prev">
+                                                    <span class="carousel-control-prev-icon"
+                                                        style="background-color: black; width:40px; height: 40px;"></span>
+                                                </a>
+                                                <a class="carousel-control-next" href="#approve-images-carousel"
+                                                    data-slide="next">
+                                                    <span class="carousel-control-next-icon"
+                                                        style="background-color: black; width:40px; height: 40px;"></span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <p class="text-center mt-4 mb-0" style="font-size: 12px;">
+                                                Note: You need to Refresh Page for changes to take effect in Gallery.
+                                            </p>
+                                        </div>
+                                        {% else %}
+                                        <div class="col-12">
+                                            NO UNAPPROVED PHOTOS!!
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Include PhotoSwipe -->
+{% include 'snippets/init_pswp.html' %}
+
+<!-- Scroll To Top Button -->
+<div id="scroll-to-top">
+    <div class="hex scroll-top">
+        <span><i class="fa fa-arrow-up"></i></span>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+<!-- PHOTOSWIPE -->
+<script>
+    // build the json album images collection
+    window.djangoAlbumImages = [
+        {% for photo in photos %}
+            {
+                src: '{{ photo.picture.url }}',
+                w:  {{ photo.picture.width }},
+                h:  {{ photo.picture.height }},
+                title: '{{ photo.caption }}',
+            },
+        {% endfor %}
+    ];
+
+    // Change album on filtering images
+    $('#gallery-container .galleryFilter a').on("click", function () {
+        let filter = $(this).data('filter');
+
+        if (filter == "") {
+            window.djangoAlbumImages = [
+                {% for photo in photos %}
+                    {
+                        src: '{{ photo.picture.url }}',
+                        w: {{ photo.picture.width }},
+                        h: {{ photo.picture.height }},
+                        title: '{{ photo.caption }}',
+                    },
+                {% endfor %}
+            ];
+
+            $('#gallery-container .gallery-item a').each(function (index, img) {
+                if ($(img).closest('#load-more').length == 0) $(img).attr("href", 'javascript:pswpInit(' + index + ')');
+            });
+        }
+        else {
+            section = filter.slice(1);
+
+            window.djangoAlbumImages = [];
+
+            {% for photo in photos %}
+            if ("{{ photo.tags }}".includes(section)) {
+                window.djangoAlbumImages.push(
+                    {
+                        src: '{{ photo.picture.url }}',
+                        w: {{ photo.picture.width }},
+                        h: {{ photo.picture.height }},
+                        title: '{{ photo.caption }}',
+                    }
+                );
+            }
+            {% endfor %}
+
+            let selector = '#gallery-container ' + filter + ' a';
+            $(selector).each(function (index, img) {
+                if ($(img).closest('#load-more').length == 0) $(img).attr("href", 'javascript:pswpInit(' + index + ')');
+            });
+        }
+
+    });
+</script>
+
+<!-- Custom JS -->
+<script src="{% static 'js/bandhu.js' %}"></script>
+<script src="{% static 'vendor/js/bootstrap-select.min.js' %}"></script>
+
+<!-- Contact Scrollspy Problem -->
+<script>contact_scrollspy()</script>
+
+<!-- Change name of image input -->
+<script>
+    $(".custom-file-input").on("change", function() {
+      var fileName = $(this).val().split("\\").pop();
+      $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+    });
+</script>
+<!-- Instantiate Bootstrap Select -->
+<script>$('#tags-select').selectpicker();</script>
+<!-- Image Validation -->
+<script>
+    function imageValidation() {
+        var imageInput = document.forms["imageUploadForm"]["image"];
+        var image = imageInput.value;
+        console.log(image)
+        var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+
+        if (!allowedExtensions.exec(image)) {
+            alert('Invalid file type');
+            imageInput.nextElementSibling.classList.remove("selected");
+            imageInput.nextElementSibling.innerHTML = "Add Image";
+            return false;
+        }
+    }
+</script>
+
+<!-- CAROUSELS: init after load, gallery auto-advance via setInterval -->
+<script>
+    window.addEventListener('load', function initCarousels() {
+        setTimeout(function() {
+            if (typeof Glide === 'undefined') return
+            var youtubeEl = document.querySelector('.youtube_glide');
+            if (youtubeEl && youtubeEl.querySelectorAll('.glide__slide').length > 0) {
+                var yt = new Glide('.youtube_glide', { type: 'carousel', focusAt: 'center', perView: 3, autoplay: 2500, gap: 20, breakpoints: { 991: { perView: 2 }, 767: { perView: 1 } } });
+                yt.mount();
+            }
+            var recentEl = document.querySelector('.recent-activities-glide');
+            if (recentEl && recentEl.querySelectorAll('.glide__slide').length > 0) {
+                var recent = new Glide('.recent-activities-glide', { type: 'carousel', focusAt: 'center', perView: 2, autoplay: 2000, gap: 30, hoverpause: true, breakpoints: { 992: { perView: 1 } } });
+                recent.mount();
+            }
+            var galleryEl = document.querySelector('.gallery_glide');
+            if (galleryEl && galleryEl.querySelectorAll('.glide__slide').length > 0) {
+                var gallery = new Glide('.gallery_glide', {
+                    type: 'carousel',
+                    focusAt: 'center',
+                    perView: 3,
+                    autoplay: 2500,
+                    hoverpause: true,
+                    animationDuration: 600,
+                    gap: 32,
+                    breakpoints: {
+                        991: { perView: 2, gap: 28 },
+                        767: { perView: 2, gap: 24 },
+                        480: { perView: 1, gap: 20 }
+                    }
+                });
+                gallery.mount();
+                window._galleryGlide = gallery
+                setInterval(function() {
+                    try {
+                        var g = window._galleryGlide
+                        if (g && g.go) g.go('>')
+                    } catch (e) {}
+                }, 2500)
+            }
+        }, 300)
+    })
+</script>
+
+<script>
+    (function initLandingHeaderAlternation() {
+        var lineEl = document.getElementById('header-text-line');
+        if (!lineEl) return;
+
+        var lines = [
+            { text: 'ସବାଶେଷ  ମଣିଷର', lang: 'or', fontFamily: 'oriya' },
+            { text: 'Sanskar · Swaraj · Swabalamban', lang: 'en', fontFamily: "'DM Sans', 'Raleway', sans-serif" }
+        ];
+
+        var current = 0;
+        lineEl.style.transition = 'opacity 0.35s ease';
+
+        setInterval(function() {
+            current = (current + 1) % lines.length;
+            var next = lines[current];
+            lineEl.style.opacity = '0';
+
+            setTimeout(function() {
+                lineEl.textContent = next.text;
+                lineEl.setAttribute('lang', next.lang);
+                lineEl.style.fontFamily = next.fontFamily;
+                lineEl.style.opacity = '1';
+            }, 180);
+        }, 2800);
+    })();
+</script>
+
+<script>
+    function imageApproval(status, image) {
+        let selector = '.unapp-photo' + image;
+        console.log($(selector).prev(), $(selector).prev().length, $(selector));
+        if ($(selector).next().length != 0) $(selector).next().addClass('active')
+        else $(selector).prev().addClass('active')
+        $(selector).remove()
+
+        $.ajax({
+            type: "POST",
+            url: "{% url 'approve_image' %}",
+            data: {
+                status: status,
+                image: image,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            success: function (data) {
+                if (data.response == "approved"){
+                    $('#alert-toast-div > div').html(
+                        `<div class="toast" id="alert_toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3500">
+                            <div class="toast-body p-2 px-3">
+                                <strong class="mr-auto">Image approved successfully!</strong>
+                                <button type="button" class="ml-3 close" style="margin-top: -3px;" data-dismiss="toast" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        </div>`
+                    )
+
+                    $('#alert_toast').toast('show');
+                    $("#alert_toast").addClass("bg-success");
+                }
+                else if (data.response == "discarded") {
+                    $('#alert-toast-div > div').html(
+                        `<div class="toast" id="alert_toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3500">
+                            <div class="toast-body p-2 px-3">
+                                <strong class="mr-auto">Image discarded successfully!</strong>
+                                <button type="button" class="ml-3 close" style="margin-top: -3px;" data-dismiss="toast" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        </div>`
+                    )
+
+                    $('#alert_toast').toast('show');
+                    $("#alert_toast").addClass("bg-danger");
+                }
+                // var data = JSON.parse(data1);
+                // $('#galleryBox').empty();
+                // for (let photo = 0; photo < data.length; photo++) {
+                //     var k = data[photo].fields.approved;
+                //     var ele = `<figure class="item cat-3 cat-4" style="width: 267px; height: 183.9px;">
+                //         <img src='/media/${data[photo].fields.picture}' alt="Item 3" data-rel="photoSwipe">
+                //         <a href="" class="stretched-link">
+                //             <i class="fab fa-instagram"></i>
+                //         </a>
+                //     </figure>`
+                //     if (!k) {
+                //         ele += `
+                //         <button type="button" onclick="imageApproval('approve','${data[photo].pk}');">Approve</button>
+                //         <button type="button" onclick="imageApproval('discard','${data[photo].pk}');">Discard</button>
+                //         `
+                //     }
+                //     $('#galleryBox').append(ele);
+                // }
+            }
+        });
+    }
+</script>
+{% endblock %}
