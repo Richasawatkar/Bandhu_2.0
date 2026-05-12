@@ -1,0 +1,68 @@
+<section id="contact" class="contact-footer-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 mb-5 mb-md-0">
+                <h3 class="contact-footer-heading">Our Initiatives</h3>
+                <div class="contact-footer-underline"></div>
+                <ul class="contact-footer-list">
+                    <li><a href="{% url 'ankurayan:ankurayan' %}">Ankurayan</a></li>
+                    <li><a href="{% url 'anandakendra:anandakendra' %}">Anandakendra</a></li>
+                    <li><a href="{% url 'ashram:ashram' %}">Bandhughar</a></li>
+                    <li><a href="{% url 'charitywork:charity_work' %}">Other Activities</a></li>
+                </ul>
+                {% if content and content.visitors_count and user.is_admin %}
+                <p class="contact-footer-visitors mt-3 mb-0">Visitors Count: {{ content.visitors_count }}</p>
+                {% endif %}
+            </div>
+
+            <div class="col-md-6">
+                <h3 class="contact-footer-heading">Contact Us</h3>
+                <div class="contact-footer-underline"></div>
+                {% if contact %}
+                <p class="contact-footer-org-name">Bandhu</p>
+                <p class="contact-footer-address">{{ contact.address }}</p>
+                <div class="contact-footer-contact-list">
+                    {% if contact.contact_no %}
+                    <a href="tel:{{ contact.contact_no }}" class="contact-footer-contact-item">
+                        <span class="contact-footer-icon-wrap"><i class="fas fa-phone-alt"></i></span>
+                        {{ contact.contact_no }}
+                    </a>
+                    {% endif %}
+                    {% if contact.email %}
+                    <a href="mailto:{{ contact.email }}" class="contact-footer-contact-item">
+                        <span class="contact-footer-icon-wrap"><i class="fas fa-envelope"></i></span>
+                        {{ contact.email }}
+                    </a>
+                    {% endif %}
+                </div>
+                <div class="contact-footer-social mt-4">
+                    {% if contact.facebook_link %}
+                    <a href="{{ contact.facebook_link }}" target="_blank" rel="noopener noreferrer" class="contact-footer-social-link" aria-label="Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    {% endif %}
+                    {% if contact.twitter_link %}
+                    <a href="{{ contact.twitter_link }}" target="_blank" rel="noopener noreferrer" class="contact-footer-social-link" aria-label="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <hr class="contact-footer-divider">
+        {% now 'Y' as current_year %}
+        <div class="contact-footer-bottom text-center">
+            <div class="contact-footer-copy">
+                &copy; <a href="{% url 'home' %}">Bandhu</a> {{ current_year }}, All Rights Reserved.
+            </div>
+            <div class="contact-footer-credits">
+                Designed and Developed by
+                <a href="https://www.linkedin.com/in/priyansh3133/">Priyansh</a>,
+                <a href="https://www.linkedin.com/in/heet-gupta-07366b177/">Heet</a> and
+                <a href="https://www.linkedin.com/in/aman-chande-544666170/">Aman</a>.
+            </div>
+        </div>
+    </div>
+</section>

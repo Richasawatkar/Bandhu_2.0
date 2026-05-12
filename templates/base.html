@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	{% load static %}
+
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link rel="shortcut icon" href='{% static "img/bandhulogo.gif" %}'>
+	<title>{% block title %} Bandhu {% endblock %} </title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+
+	<style>
+		.main{
+			min-height: 100vh;
+			/* height: 100%; */
+		}
+	</style>
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="{% static 'vendor/css/bootstrap.min.css' %}">
+	<!-- Date Picker CSS -->
+	<link rel="stylesheet" href="{% static 'vendor/css/bootstrap-datepicker.min.css' %}">
+	<!-- Font Awesome CSS -->
+	<link rel="stylesheet" href="{% static 'vendor/css/fontawesome-all.min.css' %}">
+	<!-- Glide Carousel CSS -->
+	<link rel="stylesheet" href="{% static 'vendor/css/glide.core.min.css' %}">
+	<link rel="stylesheet" href="{% static 'vendor/css/glide.theme.min.css' %}">
+	<!-- PhotoSwipe CSS -->
+	<link rel="stylesheet" href="{% static 'vendor/photoswipe/photoswipe.css' %}">
+	<link rel="stylesheet" href="{% static 'vendor/photoswipe/default-skin/default-skin.css' %}">
+	<!-- Custom CSS -->
+	<link rel="stylesheet" href="{% static 'css/custom.css' %}">
+	<link rel="stylesheet" href="{% static 'css/accounts-auth-landing.css' %}">
+
+	{% block style %}
+	{% endblock %}
+
+	<!-- Google Tag Manager -->
+	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+			new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+			j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+			'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+			})(window,document,'script','dataLayer','GTM-N3TNGLVW');</script>
+	<!-- End Google Tag Manager -->
+</head>
+<body class="{% block body_class %}{% endblock %}" data-spy="scroll" data-target=".navbar" data-offset="10">
+	<!-- Google Tag Manager (noscript) -->
+		<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N3TNGLVW"
+			height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+	<!-- End Google Tag Manager (noscript) -->
+	<div class="main">
+
+		{% block header %}
+		{% include 'snippets/navbar_landing.html' %}
+		{% endblock %}
+
+		{% block showcase %}
+		<section id="top-section" {% block top-section-style %}style="background-size: cover;"{% endblock %}>
+			<div class="top-section parallax-style">
+				<div class="parallax-overlay">
+					{% block showcase-title-container %}
+                    <div class="slider-txt-container" style="padding: 200px 0 300px 0;">
+                        <h2 class="bold-txt">{% block showcase-title %}{% endblock %}</h2>
+					</div>
+                    <!-- <h2 class="bold-txt" style="position: fixed; top: 200px; text-transform: uppercase; width: 100%; text-align: center; color: white;">Ananda Kendra</h2> -->
+
+					{% endblock %}
+				</div>
+			</div>
+		</section>
+		{% block angular %}
+		<div class="angular">
+			<div class="top-angle"></div>
+		</div>
+		{% endblock %}
+		{% endblock %}
+
+		{% block content %}
+		{% endblock %}
+	</div>
+
+	<!-- Toast -->
+	<div id="alert-toast-div" class="row justify-content-center">
+		<div style="position: fixed; bottom: 25px; left: 10px; z-index: 10;">
+			{% for message in messages %}
+			<div class="toast {{ message.tags }}" id="alert_toast{{ forloop.counter }}" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3500">
+				<div class="toast-body p-2 px-3">
+					<strong class="mr-auto">{{message}}</strong>
+					<button type="button" class="ml-3 close" style="margin-top: -3px;" data-dismiss="toast" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+
+	{% include 'snippets/footer.html' %}
+
+	{% if not user.is_authenticated %}
+	{% include 'includes/login_modal.html' %}
+	{% endif %}
+
+	<!-- Bootstrap JS -->
+    <script src="{% static 'vendor/js/jquery-3.4.1.min.js' %}"></script>
+	<script src="{% static 'vendor/js/popper.min.js' %}"></script>
+	<script src="{% static 'vendor/js/bootstrap.min.js' %}"></script>
+	<!-- Date Picker JS -->
+	<script src="{% static 'vendor/js/bootstrap-datepicker.min.js' %}"></script>
+	<!-- Glide Carousel JS -->
+	<script src="{% static 'vendor/js/glide.min.js' %}"></script>
+	<!-- Isotope JS -->
+	<script src='{% static "vendor/js/isotope.pkgd.min.js" %}'></script>
+	<!-- PhotoSwipe JS -->
+	<script src="{% static 'vendor/photoswipe/photoswipe.min.js' %}"></script>
+	<script src="{% static 'vendor/photoswipe/photoswipe-ui-default.min.js' %}"></script>
+	<!-- Custom Scripts -->
+	<script src='{% static "js/main.js" %}'></script>
+
+	<!-- Script for Toast -->
+	<script>
+		"{% for message in messages %}"
+		if("{{message}}"){
+			$('#alert_toast{{ forloop.counter }}').toast('show');
+			if("{{message.level}}" == "40")
+				document.getElementById("alert_toast{{ forloop.counter }}").classList.add("bg-danger");
+			else
+				document.getElementById("alert_toast{{ forloop.counter }}").classList.add("bg-success");
+		}
+		"{% endfor %}"
+	</script>
+
+	{% block scripts %}
+	{% endblock %}
+	{% if not user.is_authenticated %}
+	{% if open_login_modal %}
+	<script>
+		$(function () {
+			$('#loginModal').modal('show');
+		});
+	</script>
+	{% endif %}
+	<script>
+		$(document).on('click', '.auth-open-login-modal', function (e) {
+			e.preventDefault();
+			$('#signupModal').modal('hide');
+			setTimeout(function () { $('#loginModal').modal('show'); }, 350);
+		});
+		$(document).on('click', '.auth-open-signup-modal', function (e) {
+			e.preventDefault();
+			$('#loginModal').modal('hide');
+			setTimeout(function () {
+				if ($('#signupModal').length) { $('#signupModal').modal('show'); }
+				else { window.location.href = '{% url "signup" %}'; }
+			}, 350);
+		});
+	</script>
+	{% endif %}
+
+</body>
+</html>

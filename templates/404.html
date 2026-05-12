@@ -1,0 +1,107 @@
+{% extends 'accounts_base.html' %}
+
+{% block title %}
+	Bandhu | 404 Page Not Found
+{% endblock %}
+
+{% block content %}
+	<style>
+		
+	  #notfound .notfound {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		-webkit-transform: translate(-50%, -50%);
+			-ms-transform: translate(-50%, -50%);
+				transform: translate(-50%, -50%);
+	  }
+
+	  .notfound {
+		max-width: 460px;
+		width: 100%;
+		text-align: center;
+		line-height: 1.4;
+	  }
+
+	  .notfound .notfound-404 {
+		position: relative;
+		width: 180px;
+		height: 180px;
+		margin: 0px auto 50px;
+	  }
+
+
+	  .notfound .notfound-404>div:first-child:before {
+		content: '';
+		position: absolute;
+		left: -5px;
+		right: -5px;
+		bottom: -5px;
+		top: -5px;
+		-webkit-box-shadow: 0px 0px 0px 5px rgba(0, 0, 0, 0.1) inset;
+				box-shadow: 0px 0px 0px 5px rgba(0, 0, 0, 0.1) inset;
+		border-radius: 5px;
+	  }
+
+	  .notfound .notfound-404 h1 {
+		font-family: 'Cabin', sans-serif;
+		color: #000;
+		font-weight: 700;
+		margin: 0;
+		font-size: 90px;
+		position: absolute;
+		top: 50%;
+		-webkit-transform: translate(-50%, -50%);
+			-ms-transform: translate(-50%, -50%);
+				transform: translate(-50%, -50%);
+		left: 50%;
+		text-align: center;
+		height: 40px;
+		line-height: 40px;
+	  }
+
+	  .notfound h2 {
+		font-family: 'Cabin', sans-serif;
+		font-size: 33px;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 7px;
+	  }
+
+	  .notfound p {
+		font-family: 'Cabin', sans-serif;
+		font-size: 16px;
+		color: #000;
+		font-weight: 400;
+	  }
+
+	  .notfound a {
+		font-family: 'Cabin', sans-serif;
+		display: inline-block;
+		padding: 10px 25px;
+		background-color: #000000;
+		border: none;
+		border-radius: 40px;
+		color: #fff;
+		font-size: 14px;
+		font-weight: 700;
+		text-transform: uppercase;
+		text-decoration: none;
+		-webkit-transition: 0.2s all;
+		transition: 0.2s all;
+	  }
+
+	  .notfound a:hover {
+		background-color: #2c2c2c;
+	  }
+	</style>
+	<div class="container form-display" style="margin-top: 50px;">
+		<div class="wrap-login100 p-l-50 p-r-50 p-t-32 p-b-23 text-center"
+			style="margin: auto; margin-top: 50px; border: 0 solid #e7e4e4; max-width: 500px; border-radius: 5px; background-color: #;">
+			<img src="/static/img/icon/404.png" alt="">	
+			<br>
+			<h3>Sorry but the page you are looking for does not exist, have been removed. name changed or is temporarily unavailable</h3>
+			<a href="{% url 'home' %}">Back to homepage</a>
+		</div>
+	</div>
+{% endblock %}
